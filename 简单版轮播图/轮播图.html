@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图实现</title>
+	<style type="text/css">
+	.banner{
+       width:1000px;
+       height: 409px;
+       margin:100px auto;
+       position:relative;
+    }
+	li{
+		list-style: none;
+		position: absolute;
+		top: 0px;
+		display: none;
+	}
+	#jzuo,#jyou{
+		position: absolute;
+		top:190px;
+		transition:all .5s;
+        opacity: .7;
+	}
+	#jzuo:hover,#jyou:hover{
+		cursor: pointer;
+		transform:scale(1.1);
+		opacity: 1;
+	}
+	#jzuo{
+		left:78px;
+	}
+	#jyou{
+		right: 0px;
+	}
+	.banner .xianshi{
+		display: block;
+	}
+	#dian{
+       position:absolute;
+       bottom:20px;
+       left:48%;
+     }
+    #dian span{
+       display:block;
+       width:16px;
+       height:16px;
+       float:left;
+       border-radius:50%;
+       background-color:#fff;
+       margin-left:10px;
+       cursor:pointer;
+       font-size:0;
+      }
+    #dian .yanse{
+      	background-color: #de4412;
+      }
+	</style>
+</head>
+<body>
+	<div class="banner">
+		<ul>
+			<li class="xianshi"><img src="images/1.jpg"></li>
+			<li><img src="images/2.jpg"></li>
+			<li><img src="images/3.jpg"></li>
+			<li><img src="images/4.jpg"></li>
+			<li><img src="images/5.jpg"></li>
+			<li><img src="images/6.jpg"></li>
+		</ul>
+		<img id="jzuo"src="images/l.png">
+		<img id="jyou"src="images/r.png">
+		<div id="dian">
+	       	<span class="yanse">0</span>
+	      	<span>1</span>
+	       	<span>2</span>
+		   	<span>3</span>
+		   	<span>4</span>
+		   	<span>5</span>
+   		</div>
+	</div>
+	<script type="text/javascript">
+		var youjian=document.getElementById("jyou")
+		var zuojian=document.getElementById("jzuo")
+		var tu=document.getElementsByTagName("li")
+		var dianse=document.getElementsByTagName("span")
+		var a=0;
+		youjian.onclick=function(){
+			if(a<tu.length-1){
+				// a的执行次数小于5
+				tu[a].className="";
+				// 让第一张图为空
+				tu[a+1].className="xianshi";
+				// 让第二张图片显示
+				dianse[a].className=""
+				// 第一张图为空，第一个小圆点颜色也为空
+				dianse[a+1].className="yanse"
+				// 让第二张图片显示，第二个小圆点颜色也显示
+				a++
+			}
+			else{
+				tu[a].className="";
+				// 让第六张图为空
+				tu[0].className="xianshi";
+				// 让第一张图显示
+				dianse[a].className=""
+				// 第六张图为空，第六个小圆点颜色也为空
+				dianse[0].className="yanse"
+				// 第一张图显示，第一个小圆点颜色也显示
+				a=0
+			}
+		}
+		zuojian.onclick=function(){
+			if(a==0){ 
+				a=tu.length-1
+				// 让下标指到最后一张
+				tu[a].className="xianshi";
+				// 让第六张图显示
+				dianse[a].className="yanse"
+				 // 第六张图显示，第六个小圆点颜色也显示
+				dianse[0].className=""
+				// 第一张图为空，第一个小圆点颜色也为空
+			}
+			else{
+				tu[a].className="";
+				// 让第六张图为空
+				tu[a-1].className="xianshi";
+				// 让第五张图显示
+				dianse[a-1].className="yanse"
+				// 第五张图显示，第五个小圆点颜色也显示
+				dianse[a].className=""
+				a--
+			}
+			dianse[a].className="yanse";
+		}
+		for(var b=0;b<dianse.length;b++){
+			dianse[b].onclick=function(){
+				// 为每个span加点击事件
+				tu[a].className=""
+				// 第一张图为空， 
+				dianse[a].className=""
+				// 第一个小圆点颜色也为空
+				a= Number(this.innerHTML)
+				// 点击谁，谁有点击事件。this->node
+            	tu[a].className = "xianshi";
+            	// 点击指定到谁，让谁显示
+            	dianse[a].className = "yanse";
+            	// 点击指定到那个圆点，让谁颜色
+			}
+		}
+	</script>
+</body>
+</html>

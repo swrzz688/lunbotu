@@ -1,0 +1,203 @@
+ <!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>进阶版轮播图</title>
+	<style type="text/css">
+	*{margin: 0px;padding: 0;}
+	.banner{
+      width:1000px;
+      margin:100px auto;
+      position:relative;
+      overflow:hidden;
+      height:409px;
+  }
+  .banner ul{
+    position: absolute;
+    left: 0;
+    top: 0px;
+  }
+  .banner li{
+    float: left;
+  }
+	li{
+		list-style: none;
+	}
+	#zuoj,#youj{
+		position:absolute;
+        top:45%;
+        cursor:pointer;
+        transition:all .5s;
+        opacity: .7;
+	}
+	#zuoj{
+		left: 20px;
+	}
+	#youj{
+		right: 20px;
+	}
+	#zuoj:hover,#youj:hover{
+		opacity: 1;
+    transform:scale(1.1);
+	}
+  #dian{
+    position:absolute;
+    bottom:20px;
+    left:45%;
+  }
+  #dian span{
+    display:block;
+    width:16px;
+    height:16px;
+    float:left;
+    border-radius:50%;
+    background-color:#fff;
+    margin-right:10px;
+    cursor:pointer;
+    font-size:10px;
+    text-align: center;
+    line-height: 16px;
+  }
+  #dian .yanse{
+    background-color: #de4412;
+    color: #fff;
+  }
+	</style>
+</head>
+<body>
+ <div class="banner">
+      <ul style="margin-left:0;">
+        <li><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+        <li><img src="images/5.jpg" /></li>
+        <li><img src="images/6.jpg" /></li>
+      </ul>
+      <div id="dian"></div>
+      <img src="images/l.png" id="zuoj" alt="">
+      <img src="images/r.png" id="youj" alt="">
+     </div>
+     <script>
+        var youj = document.getElementById("youj");
+        var zuoj = document.getElementById("zuoj");
+        var ul = document.getElementsByClassName("banner")[0].getElementsByTagName("ul")[0];
+        var li = ul.getElementsByTagName("li")
+        var banner = document.getElementsByClassName("banner")[0];
+        var dian = document.getElementById("dian");
+        var t = 0;
+        var d = 0; 
+        var geshu = li.length;
+        var xuhuan = false;
+        var panduan = false;
+        youj.onclick = function(){
+          if(!panduan){
+          t++;
+            if(t == geshu){
+              newli=li[0].cloneNode(true)
+              ul.appendChild(newli)
+              d=0
+            }
+            else{
+              d++
+            }
+            staer("youj")
+            ul.style.width=ul.getElementsByTagName("li").length*1000+"px"
+          }
+        }
+        zuoj.onclick = function(){
+          if(!panduan){
+            t--
+            if(t!==-1){
+              d--
+              staer("zuoj")
+            }
+            else{
+              t=0
+              newlast=li[li.length-1].cloneNode(true)
+              ul.insertBefore(newlast,ul.firstChild)
+              ul.style.marginLeft=-1000+"px"
+              d=geshu-1
+              staer("zuoj")
+              xuhuan=true
+            }
+          }
+             ul.style.width=ul.getElementsByTagName("li").length*1000+"px"
+        }
+        function staer(fangxing){
+          dot()
+          var stop=setInterval(function(){
+            panduan=true
+            var zuju=parseInt(ul.style.marginLeft)
+            if(zuju==t*(-1000)){
+              clearInterval(stop)
+              panduan=false
+              if(t==geshu){
+                ul.style.marginLeft=0
+                ul.removeChild(newli)
+                t=0
+              }
+              if(xuhuan){
+                ul.style.marginLeft=(-(geshu-1)*1000)+"px"
+                ul.removeChild(newlast)
+                t=geshu-1
+                xuhuan=false
+              }
+              return;
+            }
+            if(fangxing =="youj"){
+              ul.style.marginLeft=zuju+Math.floor((t*(-1000)-zuju)/20)+"px"
+            }
+            if(fangxing=="zuoj"){
+              ul.style.marginLeft=zuju+Math.ceil((t*(-1000)-zuju)/20)+"px"
+            }
+          },16)
+        }
+        var autoPlay = setInterval(function(){
+          youj.onclick()
+        },3000)
+        //智能判断
+        banner.onmouseenter = function(){
+          clearInterval(autoPlay)
+        }
+        banner.onmouseleave = function(){
+          autoPlay = setInterval(function(){
+            youj.onclick()
+          },3000)
+        }
+     
+        // 初始化小圆点
+        for(var i = 0; i < geshu;i++){
+          var newli = document.createElement("span");
+          newli.setAttribute("index",i)
+          dian.appendChild(newli)
+        }
+        var span = dian.getElementsByTagName("span");
+        span[0].className = "yanse";
+
+
+        //更新小圆点
+        function dot(){
+          for(var i = 0; i < geshu; i++){
+            span[i].className = ""
+          }
+          span[d].className = "yanse";
+        } 
+        for(var i=0;i<geshu;i++){
+          span[i].onmouseenter = function(){
+            if(t<this.getAttribute("index")){
+              t=this.getAttribute("index")
+              d=t
+              staer("youj")
+            }
+            if(t>this.getAttribute("index")){
+              t=this.getAttribute("index")
+              d=t
+              staer("zuoj")
+            }
+          }
+        }
+     </script>
+	</script>
+</body>
+</html>

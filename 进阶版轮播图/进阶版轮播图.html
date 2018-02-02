@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>进阶版轮播图</title>
+	<style type="text/css">
+	*{margin: 0px;padding: 0;}
+	.banner{
+        width:1000px;
+        margin:100px auto;
+        position:relative;
+        overflow:hidden;
+        height:409px;
+    }
+    .banner ul{
+    	position: absolute;
+    	left: 0;
+    	top: 0px;
+    	width: 6000px;
+    }
+    .banner li{
+    	float: left;
+    }
+	li{
+		list-style: none;
+	}
+	#jzuo,#jyou{
+		position:absolute;
+        top:45%;
+        cursor:pointer;
+        transition:all .5s;
+        opacity: .7;
+	}
+	#jzuo{
+		left: 20px;
+	}
+	#jyou{
+		right: 20px;
+	}
+	#jzuo:hover,#jyou:hover{
+		opacity: 1;
+        transform:scale(1.1);
+	}
+  #dian{
+    position:absolute;
+    bottom:20px;
+    left:80%;
+  }
+  #dian span{
+    display:block;
+    width:16px;
+    height:16px;
+    float:left;
+    border-radius:50%;
+    background-color:#fff;
+    margin-right:10px;
+    cursor:pointer;
+    font-size:10px;
+    text-align: center;
+    line-height: 16px;
+  }
+  #dian .yanse{
+    background-color: #de4412;
+    color: #fff;
+  }
+	</style>
+</head>
+<body>
+	<div class="banner">
+		<ul id="nav" style="left:0;">
+			<li class="xianshi"><img src="images/1.jpg"></li>
+			<li><img src="images/2.jpg"></li>
+			<li><img src="images/3.jpg"></li>
+			<li><img src="images/4.jpg"></li>
+			<li><img src="images/5.jpg"></li>
+			<li><img src="images/6.jpg"></li>
+		</ul>
+		<img id="jzuo"src="images/l.png">
+		<img id="jyou"src="images/r.png">
+		<div id="dian">
+	       	<span class="yanse">1</span>
+	      	<span>2</span>
+	       	<span>3</span>
+		   	  <span>4</span>
+		   	  <span>5</span>
+		   	  <span>6</span>
+   		</div>
+	</div>  
+	<script>
+  var banner=document.getElementsByClassName("banner")[0]
+	var jzuo=document.getElementById("jzuo")
+	var jyou=document.getElementById("jyou")
+  var ul = document.getElementById("nav")
+  var li=document.getElementById("nav").getElementsByTagName("li")
+  var dian=document.getElementsByTagName("span")
+  var t=0;
+  // jyou.onclick= function(){
+  //   t++
+  //   if(t < li.length){
+  //     var you=setInterval(function(){
+  //       var zuoju=parseInt(ul.style.left);
+  //       if( zuoju !== -( t * 1000 )){
+  //         ul.style.left=zuoju - 25 + "px"
+  //       }
+  //       else{
+  //         clearInterval(you)
+  //       }
+  //     },20)
+  //   }
+  //   else{
+  //     t=0;
+  //     var you=setInterval(function(){
+  //       var zuoju=parseInt(ul.style.left);
+  //       if( zuoju !== -( t * 1000 )){
+  //         ul.style.left=zuoju + 25*(li.length-1) + "px"
+  //       }
+  //       else{
+  //         clearInterval(you)
+  //       }
+  //     },20);
+  //   }
+  // }
+  function dianList(){
+    for(var n=0;n<dian.length;n++){
+      dian[n].className = ""
+    }
+      dian[t].className = "yanse"
+  }
+  function newyouj(){
+    t++
+    if(t < li.length){
+      dianList()
+      var you=setInterval(function(){
+        var zuoju=parseInt(ul.style.left);
+        var width=-( t * 1000 );
+        if( zuoju !== width){
+          ul.style.left=zuoju + Math.floor((width-zuoju)/10) + "px"
+        }
+        else{
+          clearInterval(you)
+        }
+      },30)
+    }
+    else{
+      t=0;
+      dianList()
+      var you=setInterval(function(){
+        var zuoju=parseInt(ul.style.left);
+        var width=-( t * 1000 );
+        if( zuoju !== width){
+          ul.style.left=zuoju + Math.ceil(((width-zuoju)/10)*(li.length-1)) + "px"
+        }
+        else{
+          clearInterval(you)
+        }
+      },30);
+    }
+  }
+  jyou.onclick=function(){
+    newyouj()
+  }
+  function newzuoj(){
+      t--;
+      if(t !== -1){
+        dianList()
+        var you = setInterval(function(){
+            var zuoju = parseInt(ul.style.left);
+            var width=-( t * 1000 );
+          if(zuoju !== width){
+            ul.style.left = zuoju +Math.ceil((width-zuoju)/10) + "px"
+          }
+          else{
+              clearInterval(you)
+          }
+        },20)
+      }
+      else{
+        t = li.length - 1;
+        dianList()
+        var you= setInterval(function(){
+          var zuoju = parseInt(ul.style.left);
+            var width=-( t * 1000 );
+            if(zuoju !==width){
+              ul.style.left = zuoju+ Math.floor(((width-zuoju)/10) * (li.length - 1)) + "px"
+            }
+            else{
+               clearInterval(you)
+            }
+          },20)
+       }
+  }
+  jzuo.onclick=function(){
+      newzuoj()
+  }
+
+  for(var n=0;n<dian.length;n++){
+    dian[n].onmouseover=function(){
+      for(var i = 0;i<li.length;i++){
+        dian[i].className = "";
+      }
+        t = Number(this.innerHTML)-1
+        dian[t].className = "yanse"
+          newyouj()
+          newzuoj()
+    }
+  }
+
+
+  var autoplay = setInterval(function(){
+      newyouj();
+  },3000)
+  banner.onmouseenter = function(){
+      clearInterval(autoplay);
+  }
+  banner.onmouseleave = function(){
+    autoplay = setInterval(function(){
+      newyouj();
+    },3000)
+  }
+	</script>
+</body>
+</html>
